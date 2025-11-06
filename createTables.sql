@@ -3,13 +3,7 @@ CREATE DATABASE IF NOT EXISTS mechmaker;
 -- Switch to the newly created database
 USE mechmaker;
 
--- Loadout table
-CREATE TABLE IF NOT EXISTS loadout (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    mech_id INT,
-    name VARCHAR(100) NOT NULL,
-    FOREIGN KEY (mech_id) REFERENCES mech(mech_id)
-);
+
 
 -- Mech table
 CREATE TABLE IF NOT EXISTS mech (
@@ -22,6 +16,16 @@ CREATE TABLE IF NOT EXISTS mech (
    
 );
 
+-- Loadout table
+CREATE TABLE IF NOT EXISTS loadout (
+    loadout_id INT AUTO_INCREMENT PRIMARY KEY,
+    mech_id INT,
+    name VARCHAR(100) NOT NULL,
+    FOREIGN KEY (mech_id) REFERENCES mech(mech_id)
+);
+
+
+
 -- Weapon table
 CREATE TABLE IF NOT EXISTS weapon (
     weapon_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -33,8 +37,8 @@ CREATE TABLE IF NOT EXISTS weapon (
   
 );
 
--- Junction table linking mechs to weapons
-CREATE TABLE IF NOT EXISTS MechWeapons (
+-- Junction table linking loadout to weapons
+CREATE TABLE IF NOT EXISTS WeaponsLoadout (
     loadout_id INT,
     weapon_id INT,
     PRIMARY KEY (loadout_id, weapon_id),
