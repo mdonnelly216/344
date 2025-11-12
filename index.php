@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>MechMaker</title>
-    <link rel="stylesheet" href="css.css"> !
+    <link rel="stylesheet" href="css.css">
     <script src="js.js" defer></script>
 </head>
 
@@ -17,12 +17,50 @@
         <a href="#">Contact</a>
     </div>
 
-    <!-- Use any element to open the sidenav -->
-    <span onclick="openNav()">open</span>
-
-    <!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
     <div id="main">
+        <div class="top-section">
+            <h1>Top Section</h1>
+        </div>
 
+        <hr>
+
+        <div class="bottom-section">
+            <div class="menu">
+                <select>
+                    <option>Option 1A</option>
+                    <option>Option 1B</option>
+                    <option>Option 1C</option>
+                </select>
+                <button>Select</button>
+            </div>
+
+            <div class="menu">
+                <select>
+                    <option>Option 2A</option>
+                    <option>Option 2B</option>
+                    <option>Option 2C</option>
+                </select>
+                <button>Select</button>
+            </div>
+
+            <div class="menu">
+                <select>
+                    <option>Option 3A</option>
+                    <option>Option 3B</option>
+                    <option>Option 3C</option>
+                </select>
+                <button>Select</button>
+            </div>
+
+            <div class="menu">
+                <select>
+                    <option>Option 4A</option>
+                    <option>Option 4B</option>
+                    <option>Option 4C</option>
+                </select>
+                <button>Select</button>
+            </div>
+        </div>
     </div>
 </body>
 
