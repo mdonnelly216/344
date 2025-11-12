@@ -16,6 +16,10 @@ CREATE TABLE IF NOT EXISTS mech (
    
 );
 
+ALTER TABLE mech
+ADD COLUMN tonnage INT NOT NULL AFTER no_weapons,
+ADD COLUMN internal INT NOT NULL AFTER tonnage;
+
 -- Loadout table
 CREATE TABLE IF NOT EXISTS loadout (
     loadout_id INT AUTO_INCREMENT PRIMARY KEY,
