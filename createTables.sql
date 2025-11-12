@@ -1,6 +1,6 @@
 CREATE DATABASE IF NOT EXISTS mechmaker;
 
--- Switch to the newly created database
+
 USE mechmaker;
 
 
