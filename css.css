@@ -1,7 +1,9 @@
-/* The side navigation menu */
+/* -------------------- */
+/* SIDENAV STYLING */
+/* -------------------- */
 .sidenav {
     height: 100%;
-    width: 0;
+    width: 250px;
     position: fixed;
     z-index: 1;
     top: 0;
@@ -12,22 +14,20 @@
     transition: 0.5s;
 }
 
-/* The navigation menu links */
+/* Navigation menu links */
 .sidenav a {
     padding: 8px 8px 8px 32px;
     text-decoration: none;
     font-size: 25px;
     color: #818181;
     display: block;
-    transition: 0.3s;
 }
 
-/* When you mouse over the navigation links, change their color */
 .sidenav a:hover {
     color: #f1f1f1;
 }
 
-/* Position and style the close button (top right corner) */
+/* Close button */
 .sidenav .closebtn {
     position: absolute;
     top: 0;
@@ -36,13 +36,16 @@
     margin-left: 50px;
 }
 
-/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+/* Page content */
 #main {
     transition: margin-left .5s;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 
-/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+/* Responsive sidenav for small screens */
 @media screen and (max-height: 450px) {
     .sidenav {
         padding-top: 15px;
@@ -51,4 +54,70 @@
     .sidenav a {
         font-size: 18px;
     }
+}
+
+/* -------------------- */
+/* MAIN PAGE LAYOUT */
+/* -------------------- */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.top-section {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+}
+
+hr {
+    margin: 0;
+    border: none;
+    border-top: 2px solid #ccc;
+}
+
+.bottom-section {
+    flex: 1;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #fafafa;
+    padding: 20px;
+}
+
+/* -------------------- */
+/* SCROLLABLE MENU LISTS */
+/* -------------------- */
+.menu {
+    display: flex;
+    flex-direction: column;
+    width: 150px;
+    height: 150px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.menu button {
+    border: none;
+    background: none;
+    padding: 8px;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.2s;
+}
+
+.menu button:hover {
+    background-color: #f2f2f2;
+}
+
+.menu button.active {
+    background-color: #007BFF;
+    color: white;
+    font-weight: bold;
 }
