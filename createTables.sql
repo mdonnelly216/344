@@ -9,8 +9,10 @@ USE mechmaker;
 CREATE TABLE IF NOT EXISTS mech (
     mech_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
+    tonnage INT NOT NULL,
     armor INT NOT NULL,
     speed INT NOT NULL,
+    internals INT NOT NULL,
     image VARCHAR(255),
     no_weapons INT NOT NULL,
    
@@ -46,6 +48,14 @@ CREATE TABLE IF NOT EXISTS WeaponsLoadout (
     FOREIGN KEY (weapon_id) REFERENCES weapon(weapon_id)
 );
 
+
+INSERT INTO mech (name, tonnage, armor, speed, internals, image, no_weapons) VALUES
+('Atlas', 100, 10, 5, 8, 'atlas.png', 7),
+('Marauder', 75, 7, 8, 6, 'madcat.png', 5),
+('Warhammer', 70, 5, 8, 6, 'warhammer.png', 6),
+('Blackjack', 65, 5, 8, 4, 'blackjack.png', 5),
+('Raven', 35, 2, 10, 3, 'raven.png', 3),
+('Jenner', 35, 2, 14, 3, 'jenner.png', 2);
 
 INSERT INTO weapon (name, type, short_damage, medium_damage, long_damage) VALUES
 -- Missile
