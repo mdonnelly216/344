@@ -189,7 +189,7 @@ $loadouts = [
 <div class="page-container">
     <h2 class="page-title">Available Loadouts</h2>
     <p class="page-subtitle">
-        These are your current mech loadouts. You can hook this page up to your database later.
+        These are your current mech loadouts.
     </p>
 
     <?php if (empty($loadouts)): ?>

@@ -98,7 +98,7 @@
         <a href="#">About</a>
         <a href="#">Services</a>
         <a href="#">Clients</a>
-        <button>Loadouts</button>
+        <button href = loadutPage.php>Loadouts</button>
     </div>
 
     <div id="main">
