@@ -22,9 +22,26 @@
         .top-section {
             flex: 1;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
+            gap: 10px;
             background-color: #f0f0f0;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        #buttonSearch {
+            width: 60%;
+            max-width: 400px;
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 14px;
         }
 
         hr {
@@ -87,6 +104,11 @@
     <div id="main">
         <div class="top-section">
             <h1>Top Section</h1>
+
+            <!-- 🔍 Search bar added here -->
+            <div class="search-container">
+                <input type="text" id="buttonSearch" placeholder="Search options...">
+            </div>
         </div>
 
         <hr>
@@ -123,17 +145,7 @@
         </div>
     </div>
 
-    <script>
-        // Make only one button active per menu
-        document.querySelectorAll('.menu').forEach(menu => {
-            menu.addEventListener('click', e => {
-                if (e.target.tagName === 'BUTTON') {
-                    menu.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
-                    e.target.classList.add('active');
-                }
-            });
-        });
-    </script>
+    
 </body>
 
 </html>
