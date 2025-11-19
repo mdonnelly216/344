@@ -33,7 +33,6 @@ document.querySelectorAll('.menu').forEach(menu => {
     });
 });
 
-// 🔍 Search logic: filter buttons across all menus
 const searchInput = document.getElementById('buttonSearch');
 
 searchInput.addEventListener('input', function () {

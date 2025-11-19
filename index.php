@@ -13,10 +13,7 @@
 
     <div id="mySidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="#">About</a>
-        <a href="#">Services</a>
-        <a href="#">Clients</a>
-        <button href = loadutPage.php>Loadouts</button>
+        <a href="loadoutPage.php">Loadouts</a>
     </div>
 
     <div id="main">
@@ -61,7 +58,7 @@
         </div>
     </div>
 
-    
+
 </body>
 
 </html>
