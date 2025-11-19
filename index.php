@@ -23,12 +23,10 @@
 
         <hr>
 
-
-
         <div class="search-container">
             <input type="text" id="buttonSearch" placeholder="Search options...">
         </div>
-        
+
         <div class="bottom-section">
 
             <div class="menu">
