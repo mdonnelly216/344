@@ -19,14 +19,18 @@
     <div id="main">
         <div class="top-section">
             <h1>Top Section</h1>
-            <div class="search-container">
-                <input type="text" id="buttonSearch" placeholder="Search options...">
-            </div>
         </div>
 
         <hr>
 
+
+
+        <div class="search-container">
+            <input type="text" id="buttonSearch" placeholder="Search options...">
+        </div>
+        
         <div class="bottom-section">
+
             <div class="menu">
                 <button>Option 1A</button>
                 <button>Option 1B</button>
