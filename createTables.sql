@@ -157,3 +157,5 @@ INSERT INTO weapon (name, type, short_damage, medium_damage, long_damage) VALUES
 ('Clan TAG', 'Energy', 0, 0, 0),
 ('Clan Flamer', 'Energy', 1, 0, 0);
 
+ALTER TABLE mech
+ADD COLUMN picture VARCHAR(255) AFTER class;
