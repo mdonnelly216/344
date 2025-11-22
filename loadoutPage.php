@@ -1,54 +1,87 @@
 <?php
-// =============================
-// Sample mech loadouts
-// (You can later pull these from a database instead.)
-// =============================
-$loadouts = [
-    [
-        'name' => 'Scout Runner',
-        'class' => 'Light',
-        'role' => 'Recon / Harass',
-        'armor' => 40,
-        'speed' => 95,
-        'primary' => 'Light Auto-Cannon',
-        'secondary' => 'SMG',
-        'utility' => 'Sensor Ping',
-        'description' => 'Fast and fragile, built for scouting and hit-and-run tactics.'
-    ],
-    [
-        'name' => 'Frontline Bruiser',
-        'class' => 'Medium',
-        'role' => 'Frontline / Brawler',
-        'armor' => 80,
-        'speed' => 70,
-        'primary' => 'Heavy Shotgun',
-        'secondary' => 'Rocket Pod',
-        'utility' => 'Deployable Shield',
-        'description' => 'Balanced mech that excels in mid-range brawls and objective holding.'
-    ],
-    [
-        'name' => 'Siege Breaker',
-        'class' => 'Heavy',
-        'role' => 'Siege / Long Range',
-        'armor' => 110,
-        'speed' => 45,
-        'primary' => 'Railgun',
-        'secondary' => 'Missile Barrage',
-        'utility' => 'Target Painter',
-        'description' => 'Slow but devastating. Ideal for breaking defenses from a distance.'
-    ],
-    [
-        'name' => 'Support Anchor',
-        'class' => 'Support',
-        'role' => 'Heals / Buffs',
-        'armor' => 70,
-        'speed' => 60,
-        'primary' => 'Beam Rifle',
-        'secondary' => 'Repair Drone Launcher',
-        'utility' => 'Area Buff Field',
-        'description' => 'Keeps allies alive and boosted while still contributing consistent damage.'
-    ],
-];
+// DB connection
+$servername = "localhost";
+$username   = "root";
+$password   = "mdonnelly";
+$dbname     = "mechmaker";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die("DB Connection failed: " . $conn->connect_error);
+}
+
+
+// Get all loadouts + mech info
+
+$loadouts = [];
+
+$sqlLoadouts = "
+    SELECT
+        l.loadout_id,
+        l.name        AS loadout_name,
+        m.mech_id,
+        m.name        AS mech_name,
+        m.tonnage,
+        m.armor,
+        m.speed
+    FROM loadout l
+    LEFT JOIN mech m ON l.mech_id = m.mech_id
+    ORDER BY l.loadout_id
+";
+
+if ($res = $conn->query($sqlLoadouts)) {
+    while ($row = $res->fetch_assoc()) {
+        $loadouts[$row['loadout_id']] = [
+            'loadout_id'  => (int)$row['loadout_id'],
+            'name'        => $row['loadout_name'],
+            'mech_id'     => $row['mech_id'],
+            'mech_name'   => $row['mech_name'],
+            'tonnage'     => $row['tonnage'],
+            'armor'       => $row['armor'],
+            'speed'       => $row['speed'],
+            'weapons'     => []  // will fill in next
+        ];
+    }
+}
+
+// If there are no loadouts, no need to query weapons
+$weaponsByLoadout = [];
+if (!empty($loadouts)) {
+    
+    // Get all weapons per loadout
+
+    $sqlWeapons = "
+        SELECT
+            wl.loadout_id,
+            w.weapon_id,
+            w.name        AS weapon_name,
+            w.type,
+            w.short_damage,
+            w.medium_damage,
+            w.long_damage
+        FROM WeaponsLoadout wl
+        JOIN weapon w ON wl.weapon_id = w.weapon_id
+        ORDER BY wl.loadout_id, w.name
+    ";
+
+    if ($resW = $conn->query($sqlWeapons)) {
+        while ($row = $resW->fetch_assoc()) {
+            $lid = (int)$row['loadout_id'];
+            if (!isset($loadouts[$lid])) {
+                continue;
+            }
+            $loadouts[$lid]['weapons'][] = [
+                'weapon_id'     => (int)$row['weapon_id'],
+                'name'          => $row['weapon_name'],
+                'type'          => $row['type'],
+                'short_damage'  => $row['short_damage'],
+                'medium_damage' => $row['medium_damage'],
+                'long_damage'   => $row['long_damage'],
+            ];
+        }
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -137,16 +170,7 @@ $loadouts = [
             font-weight: bold;
         }
 
-        .loadout-class {
-            font-size: 12px;
-            padding: 2px 8px;
-            border-radius: 12px;
-            background: #eee;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .loadout-role {
+        .loadout-subtitle {
             font-size: 12px;
             color: #666;
         }
@@ -172,75 +196,92 @@ $loadouts = [
             font-weight: bold;
         }
 
-        .loadout-description {
+        .weapon-entry {
+            margin-top: 3px;
             font-size: 12px;
-            color: #555;
-            margin-top: 4px;
         }
     </style>
 </head>
 
 <body>
 
-    <header>
-        <h1>MechMaker – Loadouts</h1>
-        <!-- Change href if you want to go back to your main MechMaker page -->
-        <a class="back-link" href="index.php">&larr; Back to MechMaker</a>
-    </header>
+<header>
+    <h1>MechMaker – Loadouts</h1>
+    <a class="back-link" href="index.php">&larr; Back to MechMaker</a>
+</header>
 
-    <div class="page-container">
-        <h2 class="page-title">Available Loadouts</h2>
-        <p class="page-subtitle">
-            These are your current mech loadouts.
-        </p>
+<div class="page-container">
+    <h2 class="page-title">Available Loadouts</h2>
+    <p class="page-subtitle">
+        These loadouts are pulled from your <code>loadout</code>, <code>mech</code>, and <code>weapon</code> tables.
+    </p>
 
-        <?php if (empty($loadouts)): ?>
-            <p>No loadouts found.</p>
-        <?php else: ?>
-            <div class="loadouts-grid">
-                <?php foreach ($loadouts as $loadout): ?>
-                    <div class="loadout-card">
-                        <div class="loadout-header">
-                            <div>
-                                <div class="loadout-name">
-                                    <?php echo htmlspecialchars($loadout['name']); ?>
-                                </div>
-                                <div class="loadout-role">
-                                    <?php echo htmlspecialchars($loadout['role']); ?>
-                                </div>
+    <?php if (empty($loadouts)): ?>
+        <p>No loadouts found.</p>
+    <?php else: ?>
+        <div class="loadouts-grid">
+            <?php foreach ($loadouts as $loadout): ?>
+                <div class="loadout-card">
+                    <div class="loadout-header">
+                        <div>
+                            <div class="loadout-name">
+                                <?php echo htmlspecialchars($loadout['name']); ?>
                             </div>
-                            <div class="loadout-class">
-                                <?php echo htmlspecialchars($loadout['class']); ?>
+                            <div class="loadout-subtitle">
+                                <?php if (!empty($loadout['mech_name'])): ?>
+                                    Mech: <?php echo htmlspecialchars($loadout['mech_name']); ?>
+                                <?php else: ?>
+                                    Mech: (none linked)
+                                <?php endif; ?>
                             </div>
-                        </div>
-
-                        <div class="stats-row">
-                            <div class="stat-pill">
-                                Armor: <?php echo (int) $loadout['armor']; ?>
-                            </div>
-                            <div class="stat-pill">
-                                Speed: <?php echo (int) $loadout['speed']; ?>
-                            </div>
-                        </div>
-
-                        <div class="weapons">
-                            <span class="label">Primary:</span>
-                            <?php echo htmlspecialchars($loadout['primary']); ?><br>
-                            <span class="label">Secondary:</span>
-                            <?php echo htmlspecialchars($loadout['secondary']); ?><br>
-                            <span class="label">Utility:</span>
-                            <?php echo htmlspecialchars($loadout['utility']); ?>
-                        </div>
-
-                        <div class="loadout-description">
-                            <?php echo htmlspecialchars($loadout['description']); ?>
                         </div>
                     </div>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
-    </div>
+
+                    <div class="stats-row">
+                        <?php if (!is_null($loadout['armor'])): ?>
+                            <div class="stat-pill">
+                                Armor: <?php echo (int)$loadout['armor']; ?>
+                            </div>
+                        <?php endif; ?>
+                        <?php if (!is_null($loadout['speed'])): ?>
+                            <div class="stat-pill">
+                                Speed: <?php echo (int)$loadout['speed']; ?>
+                            </div>
+                        <?php endif; ?>
+                        <?php if (!is_null($loadout['tonnage'])): ?>
+                            <div class="stat-pill">
+                                Tonnage: <?php echo (int)$loadout['tonnage']; ?>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="weapons">
+                        <span class="label">Weapons:</span>
+                        <?php if (empty($loadout['weapons'])): ?>
+                            <div class="weapon-entry">
+                                (No weapons assigned)
+                            </div>
+                        <?php else: ?>
+                            <?php foreach ($loadout['weapons'] as $w): ?>
+                                <div class="weapon-entry">
+                                    <?php echo htmlspecialchars($w['name']); ?>
+                                    (<?php echo htmlspecialchars($w['type']); ?>) –
+                                    Short: <?php echo (int)$w['short_damage']; ?>,
+                                    Med: <?php echo (int)$w['medium_damage']; ?>,
+                                    Long: <?php echo (int)$w['long_damage']; ?>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+</div>
 
 </body>
-
 </html>
+
+<?php
+$conn->close();
+?>
