@@ -1,3 +1,24 @@
+<?php
+
+$servername = "localhost";
+$username = "root";  //user name
+$password = "mdonnelly";  //password used to login MySQL server
+$dbname = "mechmaker";
+$conn = new mysqli("$servername", "$username", "$password", "$dbname");
+if ($conn->connect_error) {
+    die("DB Connection failed: " . $conn->connect_error);
+}
+
+// Function to pull weapons by type
+function getWeapons($conn, $type)
+{
+    $stmt = $conn->prepare("SELECT name FROM weapon WHERE type = ?");
+    $stmt->bind_param("s", $type);
+    $stmt->execute();
+    return $stmt->get_result();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,16 +30,19 @@
 </head>
 
 <body>
-    <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
 
     <div id="mySidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="loadoutPage.php">Loadouts</a>
+        <a href="#">About</a>
+        <a href="#">Services</a>
+        <a href="#">Clients</a>
+        <button onclick="location.href='loadoutPage.php'">Loadouts</button>
     </div>
 
     <div id="main">
         <div class="top-section">
-            <h1>Top Section</h1>
+            <h1>MechMaker</h1>
+
             <div class="search-container">
                 <input type="text" id="buttonSearch" placeholder="Search options...">
             </div>
@@ -27,38 +51,53 @@
         <hr>
 
         <div class="bottom-section">
+
+            <!-- MISSILE MENU -->
             <div class="menu">
-                <button>Option 1A</button>
-                <button>Option 1B</button>
-                <button>Option 1C</button>
-                <button>Option 1D</button>
-                <button>Option 1E</button>
+                <?php
+                $results = getWeapons($conn, "Missile");
+                while ($row = $results->fetch_assoc()):
+                ?>
+                    <button><?php echo htmlspecialchars($row['name']); ?></button>
+                <?php endwhile; ?>
             </div>
 
+            <!-- BALLISTIC MENU -->
             <div class="menu">
-                <button>Option 2A</button>
-                <button>Option 2B</button>
-                <button>Option 2C</button>
-                <button>Option 2D</button>
+                <?php
+                $results = getWeapons($conn, "Ballistic");
+                while ($row = $results->fetch_assoc()):
+                ?>
+                    <button><?php echo htmlspecialchars($row['name']); ?></button>
+                <?php endwhile; ?>
             </div>
 
+            <!-- ENERGY MENU -->
+            
             <div class="menu">
-                <button>Option 3A</button>
-                <button>Option 3B</button>
-                <button>Option 3C</button>
-                <button>Option 3D</button>
-                <button>Option 3E</button>
+                <?php
+                $results = getWeapons($conn, "Energy");
+                while ($row = $results->fetch_assoc()):
+                ?>
+                    <button><?php echo htmlspecialchars($row['name']); ?></button>
+                <?php endwhile; ?>
             </div>
 
+
             <div class="menu">
-                <button>Option 4A</button>
-                <button>Option 4B</button>
-                <button>Option 4C</button>
+                <?php
+                $result = $conn->query("SELECT name FROM weapon ORDER BY type, name");
+                while ($row = $result->fetch_assoc()):
+                ?>
+                    <button><?php echo htmlspecialchars($row['name']); ?></button>
+                <?php endwhile; ?>
             </div>
+
         </div>
     </div>
-
 
 </body>
 
 </html>
+
+<?php $conn->close(); ?>
