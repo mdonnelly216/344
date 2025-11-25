@@ -67,6 +67,22 @@ mechSearchInput.addEventListener('input', function () {
         }
     });
 });
-document.querySelectorAll(".weaponSlot").addEventListener("click", () => {
-    alert("Div clicked!");
+const slots = document.querySelectorAll(".weaponSlot");
+
+slots.forEach(slot => {
+    slot.addEventListener("click", () => {
+        slots.forEach(s => s.classList.remove("active")); // clear all
+        slot.classList.add("active");                      // set clicked
+
+    });
 });
+
+
+weapons = [];
+weapons.length = 
+function addWeapon(){
+    const activeWeaponButton = document.querySelector(".menu button.active");
+    weapons += activeWeaponButton.textContent;
+
+}
+

@@ -24,6 +24,7 @@ function getMechs($conn)
     $stmt->execute();
     return $stmt->get_result();
 }
+
 ?>
 
 <!DOCTYPE html>

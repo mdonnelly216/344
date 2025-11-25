@@ -255,6 +255,10 @@ hr {
     justify-content: center;  /* horizontal text */
     align-items: center;      
 }
+.weaponSlot.active {
+    background-color: red;  
+}
+
 
 .menu-label {
     font-weight: bold;
