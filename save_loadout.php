@@ -1,9 +1,9 @@
 <?php
-// save_loadout.php
+
 $servername = "localhost";
 $username = "root";
-$password = "mdonnelly";   // adjust if needed
-$dbname = "mechmaker";     // from your createTables.sql
+$password = "mdonnelly";   
+$dbname = "mechmaker";     
 
 header('Content-Type: application/json');
 
@@ -22,7 +22,7 @@ if (!$mech_id || $name === '' || empty($weapons)) {
     exit;
 }
 
-// Get mech no_weapons limit
+//get mech no_weapons limit
 $stmt = $conn->prepare("SELECT no_weapons FROM mech WHERE mech_id = ?");
 $stmt->bind_param("i", $mech_id);
 $stmt->execute();
@@ -34,7 +34,7 @@ if (!$stmt->fetch()) {
 }
 $stmt->close();
 
-// Enforce limit
+
 $weapons = array_map('intval', $weapons);
 $weapons = array_slice(array_unique($weapons), 0, (int)$no_weapons);
 
@@ -49,7 +49,7 @@ if (!$stmt->execute()) {
 $loadout_id = $stmt->insert_id;
 $stmt->close();
 
-// Insert weapon links
+//insert weapon links
 $stmt = $conn->prepare("INSERT INTO WeaponsLoadout (loadout_id, weapon_id) VALUES (?, ?)");
 foreach ($weapons as $wid) {
     $stmt->bind_param("ii", $loadout_id, $wid);

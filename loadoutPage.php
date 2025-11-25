@@ -1,5 +1,5 @@
 <?php
-// DB connection
+
 $servername = "localhost";
 $username   = "root";
 $password   = "mdonnelly";
@@ -11,8 +11,7 @@ if ($conn->connect_error) {
 }
 
 
-// Get all loadouts + mech info
-
+// Get all loadouts and mech info
 $loadouts = [];
 
 $sqlLoadouts = "
@@ -44,7 +43,7 @@ if ($res = $conn->query($sqlLoadouts)) {
     }
 }
 
-// If there are no loadouts, no need to query weapons
+
 $weaponsByLoadout = [];
 if (!empty($loadouts)) {
 
@@ -211,10 +210,8 @@ if (!empty($loadouts)) {
     </header>
 
     <div class="page-container">
-        <h2 class="page-title">Available Loadouts</h2>
-        <p class="page-subtitle">
-            These loadouts are pulled from your <code>loadout</code>, <code>mech</code>, and <code>weapon</code> tables.
-        </p>
+        <h2 class="page-title">Loadouts</h2>
+       
 
         <?php if (empty($loadouts)): ?>
             <p>No loadouts found.</p>
@@ -319,7 +316,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     alert("Delete failed.");
                 }
             })
-            .catch(() => alert("Delete failed."));
+            .catch(() => alert("Delete failed"));
         });
     });
 });

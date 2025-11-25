@@ -1,8 +1,8 @@
 <?php
-// get_loadout.php
+
 $servername = "localhost";
 $username = "root";
-$password = "mdonnelly";   // adjust if needed
+$password = "mdonnelly"; 
 $dbname = "mechmaker";
 
 header('Content-Type: application/json');
@@ -19,7 +19,7 @@ if (!$loadout_id) {
     exit;
 }
 
-// Header (loadout + mech)
+//query
 $stmt = $conn->prepare("
     SELECT l.loadout_id, l.name,
            m.mech_id, m.name AS mech_name, m.no_weapons
@@ -38,7 +38,7 @@ if (!$header) {
     exit;
 }
 
-// Weapons
+//Weapons
 $stmt = $conn->prepare("
     SELECT w.weapon_id, w.name
     FROM WeaponsLoadout wl
