@@ -84,14 +84,14 @@ function getMechs($conn)
                 <img id=mechDisplay src="Images/atlas.png" alt="MechMaker Logo" class="logo">
             </div>
             <div class="weaponSlots">
-                <div class="weaponSlot">1</div>
-                <div class="weaponSlot">2</div>
-                <div class="weaponSlot">3</div>
-                <div class="weaponSlot">4</div>
-                <div class="weaponSlot">5</div>
-                <div class="weaponSlot">6</div>
-                <div class="weaponSlot">7</div>
-                <div class="weaponSlot">8</div>
+                <div class="weaponSlot"></div>
+                <div class="weaponSlot"></div>
+                <div class="weaponSlot"></div>
+                <div class="weaponSlot"></div>
+                <div class="weaponSlot"></div>
+                <div class="weaponSlot"></div>
+                <div class="weaponSlot"></div>
+                <div class="weaponSlot"></div>
             </div>
 
         </div>

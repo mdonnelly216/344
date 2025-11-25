@@ -47,7 +47,7 @@ if ($res = $conn->query($sqlLoadouts)) {
 // If there are no loadouts, no need to query weapons
 $weaponsByLoadout = [];
 if (!empty($loadouts)) {
-    
+
     // Get all weapons per loadout
 
     $sqlWeapons = "
@@ -205,83 +205,122 @@ if (!empty($loadouts)) {
 
 <body>
 
-<header>
-    <h1>MechMaker – Loadouts</h1>
-    <a class="back-link" href="index.php">&larr; Back to MechMaker</a>
-</header>
+    <header>
+        <h1>MechMaker – Loadouts</h1>
+        <a class="back-link" href="index.php">&larr; Back to MechMaker</a>
+    </header>
 
-<div class="page-container">
-    <h2 class="page-title">Available Loadouts</h2>
-    <p class="page-subtitle">
-        These loadouts are pulled from your <code>loadout</code>, <code>mech</code>, and <code>weapon</code> tables.
-    </p>
+    <div class="page-container">
+        <h2 class="page-title">Available Loadouts</h2>
+        <p class="page-subtitle">
+            These loadouts are pulled from your <code>loadout</code>, <code>mech</code>, and <code>weapon</code> tables.
+        </p>
 
-    <?php if (empty($loadouts)): ?>
-        <p>No loadouts found.</p>
-    <?php else: ?>
-        <div class="loadouts-grid">
-            <?php foreach ($loadouts as $loadout): ?>
-                <div class="loadout-card">
-                    <div class="loadout-header">
-                        <div>
-                            <div class="loadout-name">
-                                <?php echo htmlspecialchars($loadout['name']); ?>
-                            </div>
-                            <div class="loadout-subtitle">
-                                <?php if (!empty($loadout['mech_name'])): ?>
-                                    Mech: <?php echo htmlspecialchars($loadout['mech_name']); ?>
-                                <?php else: ?>
-                                    Mech: (none linked)
-                                <?php endif; ?>
+        <?php if (empty($loadouts)): ?>
+            <p>No loadouts found.</p>
+        <?php else: ?>
+            <div class="loadouts-grid">
+                <?php foreach ($loadouts as $loadout): ?>
+                    <div class="loadout-card">
+                        <div class="loadout-header">
+                            <div>
+                                <div class="loadout-name">
+                                    <?php echo htmlspecialchars($loadout['name']); ?>
+                                </div>
+                                <div class="loadout-subtitle">
+                                    <?php if (!empty($loadout['mech_name'])): ?>
+                                        Mech: <?php echo htmlspecialchars($loadout['mech_name']); ?>
+                                    <?php else: ?>
+                                        Mech: (none linked)
+                                    <?php endif; ?>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="stats-row">
-                        <?php if (!is_null($loadout['armor'])): ?>
-                            <div class="stat-pill">
-                                Armor: <?php echo (int)$loadout['armor']; ?>
-                            </div>
-                        <?php endif; ?>
-                        <?php if (!is_null($loadout['speed'])): ?>
-                            <div class="stat-pill">
-                                Speed: <?php echo (int)$loadout['speed']; ?>
-                            </div>
-                        <?php endif; ?>
-                        <?php if (!is_null($loadout['tonnage'])): ?>
-                            <div class="stat-pill">
-                                Tonnage: <?php echo (int)$loadout['tonnage']; ?>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-
-                    <div class="weapons">
-                        <span class="label">Weapons:</span>
-                        <?php if (empty($loadout['weapons'])): ?>
-                            <div class="weapon-entry">
-                                (No weapons assigned)
-                            </div>
-                        <?php else: ?>
-                            <?php foreach ($loadout['weapons'] as $w): ?>
-                                <div class="weapon-entry">
-                                    <?php echo htmlspecialchars($w['name']); ?>
-                                    (<?php echo htmlspecialchars($w['type']); ?>) –
-                                    Short: <?php echo (int)$w['short_damage']; ?>,
-                                    Med: <?php echo (int)$w['medium_damage']; ?>,
-                                    Long: <?php echo (int)$w['long_damage']; ?>
+                        <div class="stats-row">
+                            <?php if (!is_null($loadout['armor'])): ?>
+                                <div class="stat-pill">
+                                    Armor: <?php echo (int)$loadout['armor']; ?>
                                 </div>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
+                            <?php endif; ?>
+                            <?php if (!is_null($loadout['speed'])): ?>
+                                <div class="stat-pill">
+                                    Speed: <?php echo (int)$loadout['speed']; ?>
+                                </div>
+                            <?php endif; ?>
+                            <?php if (!is_null($loadout['tonnage'])): ?>
+                                <div class="stat-pill">
+                                    Tonnage: <?php echo (int)$loadout['tonnage']; ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+
+                        <div class="weapons">
+                            <span class="label">Weapons:</span>
+                            <?php if (empty($loadout['weapons'])): ?>
+                                <div class="weapon-entry">
+                                    (No weapons assigned)
+                                </div>
+                            <?php else: ?>
+                                <?php foreach ($loadout['weapons'] as $w): ?>
+                                    <div class="weapon-entry">
+                                        <?php echo htmlspecialchars($w['name']); ?>
+                                        (<?php echo htmlspecialchars($w['type']); ?>) –
+                                        Short: <?php echo (int)$w['short_damage']; ?>,
+                                        Med: <?php echo (int)$w['medium_damage']; ?>,
+                                        Long: <?php echo (int)$w['long_damage']; ?>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </div>
+                        <div class="delete-row">
+                            <button class="delete-loadout-btn"
+                                data-loadout-id="<?php echo (int)$loadout['loadout_id']; ?>">
+                                Delete Loadout
+                            </button>
+                        </div>
+
                     </div>
-                </div>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
-</div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+    </div>
 
 </body>
+
 </html>
 
 <?php
 $conn->close();
 ?>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".delete-loadout-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+
+            const id = btn.dataset.loadoutId;
+
+            if (!confirm("Are you sure you want to delete this loadout?")) return;
+
+            const params = new URLSearchParams();
+            params.append("loadout_id", id);
+
+            fetch("delete_loadout.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: params.toString()
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    // Remove the loadout card visually
+                    btn.closest(".loadout-card").remove();
+                } else {
+                    alert("Delete failed.");
+                }
+            })
+            .catch(() => alert("Delete failed."));
+        });
+    });
+});
+</script>
