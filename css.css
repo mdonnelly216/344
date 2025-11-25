@@ -266,3 +266,32 @@ hr {
     text-align: center; /* optional */
    
 }
+
+#overlayShortDMG {
+    position: relative;
+    left:110px;
+    top: -363px;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+    font-size: 24px;
+}
+
+
+#overlayMedDMG {
+    position: relative;
+    left:270px;
+    top: -390px;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+    font-size: 24px;
+}
+
+
+#overlayLongDMG {
+    position: relative;
+    left: 430px;
+    top: -417px;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+    font-size: 24px;
+}

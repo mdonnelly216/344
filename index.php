@@ -2,7 +2,7 @@
 
 $servername = "localhost";
 $username = "root";  //user name
-$password = "mdonnelly";  //password used to login MySQL server
+$password = "4356An3?";  //password used to login MySQL server
 $dbname = "mechmaker";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -38,6 +38,7 @@ function getMechs($conn)
     <script src="print.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="print.js" defer></script>
 </head>
 
 <body>
@@ -66,7 +67,6 @@ function getMechs($conn)
             </button>
             <?php endwhile; ?>
         </div>
-        
     </div>
 
     <div>
@@ -77,9 +77,13 @@ function getMechs($conn)
 
         <div class="top-section">
             <h1>MechMaker</h1>
-            <div class=mechImage>
-                <img id = mechDisplay src="Images/atlas.png" alt="MechMaker Logo" class="logo">
+            <div class="mechWrapper">
+                <img id="mechDisplay" src="">
+                <div id="overlayShortDMG" class="overlayText">0</div>
+                <div id="overlayMedDMG" class="overlayText">0</div>
+                <div id="overlayLongDMG" class="overlayText">0</div>
             </div>
+    
             <div class="weaponSlots">
                 <div class="weaponSlot">1</div>
                 <div class="weaponSlot">2</div>
