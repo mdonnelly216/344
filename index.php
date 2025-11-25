@@ -17,6 +17,13 @@ function getWeapons($conn, $type)
     $stmt->execute();
     return $stmt->get_result();
 }
+
+function getMechs($conn)
+{
+    $stmt = $conn->prepare("SELECT name FROM mech");
+    $stmt->execute();
+    return $stmt->get_result();
+}
 ?>
 
 <!DOCTYPE html>
@@ -41,6 +48,24 @@ function getWeapons($conn, $type)
     <div id="mySidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         <a href="loadoutPage.php">Loadouts</a>
+
+        <div class="search-container">
+            <input type="text" id="mechSearch" placeholder="Search Mechs...">
+        </div>
+
+        <div class="mechMenu">
+            <?php
+                $results = getMechs($conn);
+                while ($row = $results->fetch_assoc()):
+            ?>
+            <button>
+                <?php 
+                    echo htmlspecialchars($row['name']); 
+                ?>
+            </button>
+            <?php endwhile; ?>
+        </div>
+        
     </div>
 
     <div>        

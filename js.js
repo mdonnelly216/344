@@ -33,12 +33,28 @@ document.querySelectorAll('.menu').forEach(menu => {
     });
 });
 
-const searchInput = document.getElementById('buttonSearch');
+const weaponSearchInput = document.getElementById('buttonSearch');
 
-searchInput.addEventListener('input', function () {
+weaponSearchInput.addEventListener('input', function () {
     const query = this.value.trim().toLowerCase();
 
     document.querySelectorAll('.menu button').forEach(btn => {
+        const text = btn.textContent.toLowerCase();
+        if (!query || text.includes(query)) {
+            btn.style.display = '';
+        } else {
+            btn.style.display = 'none';
+        }
+    });
+});
+
+
+const mechSearchInput = document.getElementById('mechSearch');
+
+mechSearchInput.addEventListener('input', function () {
+    const query = this.value.trim().toLowerCase();
+
+    document.querySelectorAll('.mechMenu button').forEach(btn => {
         const text = btn.textContent.toLowerCase();
         if (!query || text.includes(query)) {
             btn.style.display = '';

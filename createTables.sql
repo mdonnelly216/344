@@ -3,7 +3,7 @@ CREATE DATABASE IF NOT EXISTS mechmaker;
 
 USE mechmaker;
 
-
+select * from weapons;
 
 -- Mech table
 CREATE TABLE IF NOT EXISTS mech (
@@ -14,8 +14,7 @@ CREATE TABLE IF NOT EXISTS mech (
     speed INT NOT NULL,
     internals INT NOT NULL,
     image VARCHAR(255),
-    no_weapons INT NOT NULL,
-   
+    no_weapons INT NOT NULL
 );
 
 ALTER TABLE mech
@@ -39,8 +38,7 @@ CREATE TABLE IF NOT EXISTS weapon (
     type VARCHAR(50) NOT NULL,
     short_damage INT NOT NULL, -- based on range
     medium_damage INT NOT NULL,
-    long_damage INT NOT NULL,
-  
+    long_damage INT NOT NULL  
 );
 
 -- Junction table linking loadout to weapons
@@ -158,4 +156,4 @@ INSERT INTO weapon (name, type, short_damage, medium_damage, long_damage) VALUES
 ('Clan Flamer', 'Energy', 1, 0, 0);
 
 ALTER TABLE mech
-ADD COLUMN picture VARCHAR(255) AFTER class;
+ADD COLUMN picture VARCHAR(255);
