@@ -24,14 +24,18 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Make only one button active per menu
-document.querySelectorAll('.menu').forEach(menu => {
-    menu.addEventListener('click', e => {
-        if (e.target.tagName === 'BUTTON') {
-            menu.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
-            e.target.classList.add('active');
-        }
+const allButtons = document.querySelectorAll(".menu button");
+
+    allButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            // Remove active from ALL buttons in ALL menus
+            allButtons.forEach(btn => btn.classList.remove("active"));
+
+            // Activate the clicked one
+            button.classList.add("active");
+        });
     });
-});
+
 
 const searchInput = document.getElementById('buttonSearch');
 
@@ -46,4 +50,8 @@ searchInput.addEventListener('input', function () {
             btn.style.display = 'none';
         }
     });
+});
+
+document.querySelectorAll(".weaponSlot").addEventListener("click", () => {
+    alert("Div clicked!");
 });
