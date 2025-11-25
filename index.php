@@ -2,7 +2,7 @@
 
 $servername = "localhost";
 $username = "root";  //user name
-$password = "mdonnelly";  //password used to login MySQL server
+$password = "4356An3?";  //password used to login MySQL server
 $dbname = "mechmaker";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -27,6 +27,9 @@ function getWeapons($conn, $type)
     <title>MechMaker</title>
     <link rel="stylesheet" href="css.css">
     <script src="js.js" defer></script>
+    <script src="print.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> 
 </head>
 
 <body>
@@ -40,10 +43,33 @@ function getWeapons($conn, $type)
         <a href="loadoutPage.php">Loadouts</a>
     </div>
 
+    <div>        
+    <input type ="button" value ="Print Loadout" onclick="printPDF()"></button>
+    </div>
+
     <div id="main">
 
         <div class="top-section">
             <h1>MechMaker</h1>
+            <div class = mechImage>
+                <img src="Images/atlasEdited.png" alt="MechMaker Logo" class="logo">
+            </div>
+            <div class = weaponSlot1>
+            </div>
+            <div class = weaponSlot2>
+            </div>
+            <div class = weaponSlot3>
+            </div>
+            <div class = weaponSlot4>
+            </div>
+            <div class = weaponSlot5>
+            </div>
+            <div class = weaponSlot6>
+            </div>
+            <div class = weaponSlot7>
+            </div>
+            <div class = weaponSlot8>
+            </div>
         </div>
 
         <hr>
