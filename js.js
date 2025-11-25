@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (slotContainer) {
         slots = Array.from(slotContainer.querySelectorAll(".weaponSlot"));
 
-        // If no slots exist in HTML, create them
+        
         if (!slots.length) {
             for (let i = 0; i < MAX_SLOTS; i++) {
                 const div = document.createElement("div");
