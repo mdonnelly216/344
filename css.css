@@ -254,6 +254,10 @@ hr {
     display: flex;
     justify-content: center;  /* horizontal text */
     align-items: center;      
+    font-size: 8px;
+    text-align: center;
+
+
 }
 .weaponSlot.active {
     background-color: red;  

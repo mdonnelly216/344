@@ -55,18 +55,21 @@ function getMechs($conn)
             <input type="text" id="mechSearch" placeholder="Search Mechs...">
         </div>
 
+        <?php
+        // Example: mech menu on the Mech Maker page
+        $mechs = $conn->query("SELECT mech_id, name, no_weapons FROM mech ORDER BY name");
+        ?>
         <div class="mechMenu">
-            <?php
-                $results = getMechs($conn);
-                while ($row = $results->fetch_assoc()):
-            ?>
-            <button>
-                <?php 
-                    echo htmlspecialchars($row['name']); 
-                ?>
-            </button>
+            <?php while ($row = $mechs->fetch_assoc()): ?>
+                <button
+                    type="button"
+                    data-mech-id="<?= (int)$row['mech_id'] ?>"
+                    data-no-weapons="<?= (int)$row['no_weapons'] ?>">
+                    <?= htmlspecialchars($row['name']) ?>
+                </button>
             <?php endwhile; ?>
         </div>
+        
     </div>
 
     <div>
@@ -85,14 +88,14 @@ function getMechs($conn)
             </div>
     
             <div class="weaponSlots">
-                <div class="weaponSlot">1</div>
-                <div class="weaponSlot">2</div>
-                <div class="weaponSlot">3</div>
-                <div class="weaponSlot">4</div>
-                <div class="weaponSlot">5</div>
-                <div class="weaponSlot">6</div>
-                <div class="weaponSlot">7</div>
-                <div class="weaponSlot">8</div>
+                <div class="weaponSlot"></div>
+                <div class="weaponSlot"></div>
+                <div class="weaponSlot"></div>
+                <div class="weaponSlot"></div>
+                <div class="weaponSlot"></div>
+                <div class="weaponSlot"></div>
+                <div class="weaponSlot"></div>
+                <div class="weaponSlot"></div>
             </div>
 
         </div>
@@ -105,50 +108,109 @@ function getMechs($conn)
 
         <div class="bottom-section">
 
-            <!-- MISSILE MENU -->
-            <div class="menu-container">
-                <p class="menu-label">Missile</p>
-                <div class="menu">
-                    <?php
-                    $results = getWeapons($conn, "Missile");
-                    while ($row = $results->fetch_assoc()):
-                    ?>
-                        <button><?php echo htmlspecialchars($row['name']); ?></button>
-                    <?php endwhile; ?>
+            <div class="bottom-section">
+
+                <?php
+                // Get all weapons from DB
+                $weapons = $conn->query("
+                    SELECT weapon_id, name, type
+                    FROM weapon
+                    ORDER BY type, name
+                ");
+
+                $missiles   = [];
+                $ballistics = [];
+                $energy     = [];
+
+                while ($w = $weapons->fetch_assoc()) {
+                    $type = strtolower($w['type']);
+
+                    if ($type === 'missile') {
+                        $missiles[] = $w;
+                    } elseif ($type === 'ballistic') {
+                        $ballistics[] = $w;
+                    } elseif ($type === 'energy') {
+                        $energy[] = $w;
+                    }
+                }
+                ?>
+
+                <div class="menu-container">
+                    <div class="menu-label">Missile</div>
+                    <div class="menu">
+                        <?php foreach ($missiles as $w): ?>
+                            <button type="button"
+                                data-weapon-id="<?= (int)$w['weapon_id'] ?>">
+                                <?= htmlspecialchars($w['name']) ?>
+                            </button>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
-            </div>
 
-            <!-- BALLISTIC MENU -->
-            <div class="menu-container">
-                <p class="menu-label">Ballistic</p>
-
-                <div class="menu">
-                    <?php
-                    $results = getWeapons($conn, "Ballistic");
-                    while ($row = $results->fetch_assoc()):
-                    ?>
-                        <button><?php echo htmlspecialchars($row['name']); ?></button>
-                    <?php endwhile; ?>
+                <div class="menu-container">
+                    <div class="menu-label">Ballistic</div>
+                    <div class="menu">
+                        <?php foreach ($ballistics as $w): ?>
+                            <button type="button"
+                                data-weapon-id="<?= (int)$w['weapon_id'] ?>">
+                                <?= htmlspecialchars($w['name']) ?>
+                            </button>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
-            </div>
 
-            <!-- ENERGY MENU -->
-            <div class="menu-container">
-                <p class="menu-label">Energy</p>
-                <div class="menu">
-                    <?php
-                    $results = getWeapons($conn, "Energy");
-                    while ($row = $results->fetch_assoc()):
-                    ?>
-                        <button><?php echo htmlspecialchars($row['name']); ?></button>
-                    <?php endwhile; ?>
+                <div class="menu-container">
+                    <div class="menu-label">Energy</div>
+                    <div class="menu">
+                        <?php foreach ($energy as $w): ?>
+                            <button type="button"
+                                data-weapon-id="<?= (int)$w['weapon_id'] ?>">
+                                <?= htmlspecialchars($w['name']) ?>
+                            </button>
+                        <?php endforeach; ?>
+                    </div>
+
                 </div>
+
+
+                <button type="button" onclick="addWeapon()">Add Selected Weapon</button>
+
+
             </div>
+            <div id="loadoutControls" style="margin-top:20px; text-align:center;">
+                <input type="text" id="loadoutName" placeholder="New loadout name">
 
+                <button type="button" id="saveLoadoutBtn">
+                    Save Loadout
+                </button>
 
+                <br><br>
 
+                <select id="loadoutSelect">
+                    <option value="">-- Select saved loadout --</option>
+                    <?php
+                    $res = $conn->query("
+            SELECT l.loadout_id, l.name, m.name AS mech_name
+            FROM loadout l
+            JOIN mech m ON l.mech_id = m.mech_id
+            ORDER BY l.loadout_id DESC
+        ");
+                    while ($row = $res->fetch_assoc()):
+                    ?>
+                        <option value="<?= (int)$row['loadout_id'] ?>">
+                            <?= htmlspecialchars($row['name'] . ' (' . $row['mech_name'] . ')') ?>
+                        </option>
+                    <?php endwhile; ?>
+                </select>
+
+                <button type="button" id="loadLoadoutBtn">
+                    Load
+                </button>
+            </div>
         </div>
-    </div>
+        
+
+
 
 </body>
 

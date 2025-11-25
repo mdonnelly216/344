@@ -7,11 +7,46 @@ function closeNav() {
 }
 
 /* -------------------- */
-/* MENU SELECTION LOGIC */
+/* GLOBAL STATE         */
+/* -------------------- */
+let currentMech = null;         // {id, name, no_weapons}
+let selectedWeapons = [];       // [{id, name}, ...]
+let slots = [];
+let activeSlotIndex = 0;
+const MAX_SLOTS = 10;
+
+/* Utility to (re)render weapon slots text */
+function renderSelectedWeapons() {
+    if (!slots.length) return;
+    slots.forEach((slot, idx) => {
+        const w = selectedWeapons[idx];
+        slot.textContent = w ? w.name : "";
+    });
+}
+
+/* Show/hide weapon slots based on mech.no_weapons */
+function updateWeaponSlotsVisibility() {
+    if (!slots.length) return;
+    const max = currentMech ? currentMech.no_weapons : MAX_SLOTS;
+    slots.forEach((slot, idx) => {
+        slot.style.display = (idx < max) ? "flex" : "none";
+    });
+
+    // Trim selected weapons if they exceed limit
+    if (selectedWeapons.length > max) {
+        selectedWeapons = selectedWeapons.slice(0, max);
+        renderSelectedWeapons();
+    }
+}
+
+/* -------------------- */
+/* DOMContentLoaded     */
 /* -------------------- */
 document.addEventListener("DOMContentLoaded", () => {
 
-    // Make only one weapon active across ALL menus
+    /* -------------------- */
+    /* WEAPON BUTTON LOGIC  */
+    /* -------------------- */
     const allButtons = document.querySelectorAll(".menu button");
 
     allButtons.forEach(button => {
@@ -21,19 +56,17 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    /* -------------------- */
-    /* WEAPON SEARCH         */
-    /* -------------------- */
+    /* WEAPON SEARCH */
     const weaponSearchInput = document.getElementById('buttonSearch');
-
-    weaponSearchInput.addEventListener('input', function () {
-        const query = this.value.trim().toLowerCase();
-
-        allButtons.forEach(btn => {
-            const text = btn.textContent.toLowerCase();
-            btn.style.display = (!query || text.includes(query)) ? "" : "none";
+    if (weaponSearchInput) {
+        weaponSearchInput.addEventListener('input', function () {
+            const query = this.value.trim().toLowerCase();
+            allButtons.forEach(btn => {
+                const text = btn.textContent.toLowerCase();
+                btn.style.display = (!query || text.includes(query)) ? "" : "none";
+            });
         });
-    });
+    }
 
     /* -------------------- */
     /* MECH SEARCH & DISPLAY */
@@ -42,42 +75,193 @@ document.addEventListener("DOMContentLoaded", () => {
     const mechButtons = document.querySelectorAll('.mechMenu button');
     const mechDisplay = document.getElementById('mechDisplay');
 
-    mechSearchInput.addEventListener('input', function () {
-        const query = this.value.trim().toLowerCase();
-
-        mechButtons.forEach(btn => {
-            const text = btn.textContent.toLowerCase();
-            btn.style.display = (!query || text.includes(query)) ? "" : "none";
+    if (mechSearchInput) {
+        mechSearchInput.addEventListener('input', function () {
+            const query = this.value.trim().toLowerCase();
+            mechButtons.forEach(btn => {
+                const text = btn.textContent.toLowerCase();
+                btn.style.display = (!query || text.includes(query)) ? "" : "none";
+            });
         });
-    });
+    }
 
     mechButtons.forEach(button => {
         button.addEventListener('click', () => {
             const mechName = button.textContent.trim();
             const fileName = mechName.toLowerCase().replace(/\s+/g, '') + ".png";
-            mechDisplay.src = "Images/" + fileName;
+
+            if (mechDisplay) {
+                mechDisplay.src = "Images/" + fileName;
+            }
+
+            // Store mech info + reset weapons
+            currentMech = {
+                id: parseInt(button.dataset.mechId, 10),
+                name: mechName,
+                no_weapons: parseInt(button.dataset.noWeapons, 10) || MAX_SLOTS
+            };
+
+            selectedWeapons = [];
+            activeSlotIndex = 0;
+            if (slots[0]) {
+                slots[0].classList.add("active");
+            }
+            renderSelectedWeapons();
+            updateWeaponSlotsVisibility();
         });
     });
 
     /* -------------------- */
-    /* WEAPON SLOT SELECTION */
+    /* WEAPON SLOTS INIT    */
     /* -------------------- */
-    const slots = document.querySelectorAll(".weaponSlot");
+    const slotContainer = document.getElementById("weaponSlots") ||
+                          document.querySelector(".weaponSlots");
 
-    slots.forEach(slot => {
-        slot.addEventListener("click", () => {
-            slots.forEach(s => s.classList.remove("active"));
-            slot.classList.add("active");
+    if (slotContainer) {
+        slots = Array.from(slotContainer.querySelectorAll(".weaponSlot"));
+
+        // If no slots exist in HTML, create them
+        if (!slots.length) {
+            for (let i = 0; i < MAX_SLOTS; i++) {
+                const div = document.createElement("div");
+                div.className = "weaponSlot";
+                slotContainer.appendChild(div);
+                slots.push(div);
+            }
+        }
+
+        slots.forEach((slot, idx) => {
+            slot.addEventListener("click", () => {
+                activeSlotIndex = idx;
+                slots.forEach(s => s.classList.remove("active"));
+                slot.classList.add("active");
+            });
         });
-    });
 
+        // Default: first slot active
+        if (slots[0]) {
+            slots[0].classList.add("active");
+        }
+
+        updateWeaponSlotsVisibility();
+    }
+
+    /* -------------------- */
+    /* LOADOUT SAVE/LOAD    */
+    /* -------------------- */
+    const saveBtn       = document.getElementById("saveLoadoutBtn");
+    const loadBtn       = document.getElementById("loadLoadoutBtn");
+    const loadoutSelect = document.getElementById("loadoutSelect");
+    const nameInput     = document.getElementById("loadoutName");
+
+    // Save Loadout
+    if (saveBtn) {
+        saveBtn.addEventListener("click", () => {
+            if (!currentMech) {
+                alert("Select a mech first.");
+                return;
+            }
+            const name = nameInput ? nameInput.value.trim() : "";
+            if (!name) {
+                alert("Give your loadout a name.");
+                return;
+            }
+            if (!selectedWeapons.length) {
+                alert("Add at least one weapon.");
+                return;
+            }
+
+            const params = new URLSearchParams();
+            params.append("mech_id", currentMech.id);
+            params.append("name", name);
+            selectedWeapons.forEach(w => {
+                params.append("weapons[]", w.id);
+            });
+
+            fetch("save_loadout.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: params.toString()
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.success) {
+                        alert("Error saving loadout: " + (data.error || "unknown"));
+                        return;
+                    }
+                    alert("Loadout saved!");
+
+                    // Optionally add it into the select immediately
+                    if (loadoutSelect) {
+                        const opt = document.createElement("option");
+                        opt.value = data.loadout_id;
+                        opt.textContent = name + " (" + currentMech.name + ")";
+                        loadoutSelect.insertBefore(opt, loadoutSelect.options[1] || null);
+                        loadoutSelect.value = data.loadout_id;
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("Save failed.");
+                });
+        });
+    }
+
+    // Load Loadout
+    if (loadBtn && loadoutSelect) {
+        loadBtn.addEventListener("click", () => {
+            const id = loadoutSelect.value;
+            if (!id) {
+                alert("Pick a loadout to load.");
+                return;
+            }
+
+            fetch("get_loadout.php?loadout_id=" + encodeURIComponent(id))
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.success) {
+                        alert("Error loading: " + (data.error || "unknown"));
+                        return;
+                    }
+
+                    // Set mech
+                    const mech = data.mech;
+                    currentMech = {
+                        id: mech.mech_id,
+                        name: mech.name,
+                        no_weapons: mech.no_weapons
+                    };
+
+                    // Try to click the matching mech button (for image, highlight)
+                    const mechBtn = Array.from(mechButtons).find(
+                        b => parseInt(b.dataset.mechId, 10) === mech.mech_id
+                    );
+                    if (mechBtn) {
+                        mechBtn.click();
+                    } else {
+                        updateWeaponSlotsVisibility();
+                    }
+
+                    // Set weapons
+                    selectedWeapons = data.weapons.map(w => ({
+                        id: w.weapon_id,
+                        name: w.name
+                    }));
+
+                    renderSelectedWeapons();
+                    updateWeaponSlotsVisibility();
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("Load failed.");
+                });
+        });
+    }
 });
 
 /* -------------------- */
 /* ADD WEAPON FUNCTION  */
 /* -------------------- */
-let weapons = [];
-
 function addWeapon() {
     const activeWeaponButton = document.querySelector(".menu button.active");
 
@@ -86,6 +270,32 @@ function addWeapon() {
         return;
     }
 
-    weapons.push(activeWeaponButton.textContent);
-    console.log("Current weapons:", weapons);
+    if (!currentMech) {
+        alert("Select a mech first!");
+        return;
+    }
+
+    const max = currentMech.no_weapons || MAX_SLOTS;
+    if (selectedWeapons.length >= max && !selectedWeapons[activeSlotIndex]) {
+        alert("This mech can only mount " + max + " weapons.");
+        return;
+    }
+
+    const weapon = {
+        id: parseInt(activeWeaponButton.dataset.weaponId, 10),
+        name: activeWeaponButton.textContent.trim()
+    };
+
+    // Place weapon into active slot (if within limit),
+    // otherwise append at the end if we still have space.
+    let idx = activeSlotIndex;
+    if (idx >= max) {
+        idx = selectedWeapons.length;
+    }
+    selectedWeapons[idx] = weapon;
+
+    // remove holes
+    selectedWeapons = selectedWeapons.filter(Boolean);
+
+    renderSelectedWeapons();
 }
