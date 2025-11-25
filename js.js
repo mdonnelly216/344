@@ -67,6 +67,21 @@ mechSearchInput.addEventListener('input', function () {
         }
     });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const mechButtons = document.querySelectorAll('.mechMenu button');
+    const mechDisplay = document.getElementById('mechDisplay');
+
+    mechButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const mechName = button.textContent.trim();
+            const fileName = mechName.toLowerCase().replace(/\s+/g, '') + ".png";
+            mechDisplay.src = "Images/" + fileName;
+        });
+    });
+});
+
 document.querySelectorAll(".weaponSlot").addEventListener("click", () => {
     alert("Div clicked!");
 });
+

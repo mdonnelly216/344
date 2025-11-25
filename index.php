@@ -2,7 +2,7 @@
 
 $servername = "localhost";
 $username = "root";  //user name
-$password = "mdonnelly";  //password used to login MySQL server
+$password = "4356An3?";  //password used to login MySQL server
 $dbname = "mechmaker";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -77,7 +77,7 @@ function getMechs($conn)
         <div class="top-section">
             <h1>MechMaker</h1>
             <div class=mechImage>
-                <img src="Images/atlasEdited.png" alt="MechMaker Logo" class="logo">
+                <img id = mechDisplay src="Images/atlas.png" alt="MechMaker Logo" class="logo">
             </div>
             <div class="weaponSlots">
                 <div class="weaponSlot">1</div>
