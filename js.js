@@ -6,16 +6,14 @@ function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
 }
 
-/* -------------------- */
-/* GLOBAL STATE         */
-/* -------------------- */
-let currentMech = null;         // {id, name, no_weapons}
-let selectedWeapons = [];       // [{id, name}, ...]
+
+let currentMech = null;         
+let selectedWeapons = [];       
 let slots = [];
 let activeSlotIndex = 0;
 const MAX_SLOTS = 10;
 
-/* Utility to (re)render weapon slots text */
+//update weapon slots with selected weapons
 function renderSelectedWeapons() {
     if (!slots.length) return;
     slots.forEach((slot, idx) => {
@@ -24,7 +22,7 @@ function renderSelectedWeapons() {
     });
 }
 
-/* Show/hide weapon slots based on mech.no_weapons */
+/*Show weapon slots based on mech.no_weapons */
 function updateWeaponSlotsVisibility() {
     if (!slots.length) return;
     const max = currentMech ? currentMech.no_weapons : MAX_SLOTS;
@@ -32,21 +30,17 @@ function updateWeaponSlotsVisibility() {
         slot.style.display = (idx < max) ? "flex" : "none";
     });
 
-    // Trim selected weapons if they exceed limit
+    //Trim selected weapons if they exceed limit
     if (selectedWeapons.length > max) {
         selectedWeapons = selectedWeapons.slice(0, max);
         renderSelectedWeapons();
     }
 }
 
-/* -------------------- */
-/* DOMContentLoaded     */
-/* -------------------- */
+
 document.addEventListener("DOMContentLoaded", () => {
 
-    /* -------------------- */
-    /* WEAPON BUTTON LOGIC  */
-    /* -------------------- */
+    //weapon buttons
     const allButtons = document.querySelectorAll(".menu button");
 
     allButtons.forEach(button => {
@@ -56,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    /* WEAPON SEARCH */
+    //seaching for a weapon
     const weaponSearchInput = document.getElementById('buttonSearch');
     if (weaponSearchInput) {
         weaponSearchInput.addEventListener('input', function () {
@@ -68,9 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    /* -------------------- */
-    /* MECH SEARCH & DISPLAY */
-    /* -------------------- */
+    //seaching for a mech
     const mechSearchInput = document.getElementById('mechSearch');
     const mechButtons = document.querySelectorAll('.mechMenu button');
     const mechDisplay = document.getElementById('mechDisplay');
@@ -94,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 mechDisplay.src = "Images/" + fileName;
             }
 
-            // Store mech info + reset weapons
+            //mech info
             currentMech = {
                 id: parseInt(button.dataset.mechId, 10),
                 name: mechName,
@@ -111,9 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    /* -------------------- */
-    /* WEAPON SLOTS INIT    */
-    /* -------------------- */
+    //weapon slots
     const slotContainer = document.getElementById("weaponSlots") ||
                           document.querySelector(".weaponSlots");
 
@@ -138,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
 
-        // Default: first slot active
+        //first slot selected by default
         if (slots[0]) {
             slots[0].classList.add("active");
         }
@@ -146,15 +136,15 @@ document.addEventListener("DOMContentLoaded", () => {
         updateWeaponSlotsVisibility();
     }
 
-    /* -------------------- */
-    /* LOADOUT SAVE/LOAD    */
-    /* -------------------- */
+    
+    /* loadout saving and loading   */
+    
     const saveBtn       = document.getElementById("saveLoadoutBtn");
     const loadBtn       = document.getElementById("loadLoadoutBtn");
     const loadoutSelect = document.getElementById("loadoutSelect");
     const nameInput     = document.getElementById("loadoutName");
 
-    // Save Loadout
+    //Save loadout
     if (saveBtn) {
         saveBtn.addEventListener("click", () => {
             if (!currentMech) {
@@ -191,7 +181,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                     alert("Loadout saved!");
 
-                    // Optionally add it into the select immediately
+                    
                     if (loadoutSelect) {
                         const opt = document.createElement("option");
                         opt.value = data.loadout_id;
@@ -207,7 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Load Loadout
+    //loading loadout
     if (loadBtn && loadoutSelect) {
         loadBtn.addEventListener("click", () => {
             const id = loadoutSelect.value;
@@ -224,7 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         return;
                     }
 
-                    // Set mech
+                    //get mech
                     const mech = data.mech;
                     currentMech = {
                         id: mech.mech_id,
@@ -232,7 +222,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         no_weapons: mech.no_weapons
                     };
 
-                    // Try to click the matching mech button (for image, highlight)
+                    
                     const mechBtn = Array.from(mechButtons).find(
                         b => parseInt(b.dataset.mechId, 10) === mech.mech_id
                     );
@@ -242,7 +232,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         updateWeaponSlotsVisibility();
                     }
 
-                    // Set weapons
+                    //get weapongs
                     selectedWeapons = data.weapons.map(w => ({
                         id: w.weapon_id,
                         name: w.name
@@ -259,9 +249,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-/* -------------------- */
-/* ADD WEAPON FUNCTION  */
-/* -------------------- */
+//adding weapons to loadout and slot
 function addWeapon() {
     const activeWeaponButton = document.querySelector(".menu button.active");
 
@@ -286,8 +274,6 @@ function addWeapon() {
         name: activeWeaponButton.textContent.trim()
     };
 
-    // Place weapon into active slot (if within limit),
-    // otherwise append at the end if we still have space.
     let idx = activeSlotIndex;
     if (idx >= max) {
         idx = selectedWeapons.length;

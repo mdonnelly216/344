@@ -7,7 +7,7 @@ async function printPDF() {
 
     const mechImage = document.getElementById("mechDisplay");
 
-    // Convert image -> canvas
+    // image to canvas
     const canvas = await html2canvas(mechImage, {
         backgroundColor: null, 
         scale: 1 

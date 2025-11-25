@@ -1,6 +1,4 @@
-/* -------------------- */
-/* SIDENAV STYLING */
-/* -------------------- */
+
 .sidenav {
     height: 100%;
     width: 250px;
@@ -14,7 +12,7 @@
     transition: 0.5s;
 }
 
-/* Navigation menu links */
+
 .sidenav a {
     padding: 8px 8px 8px 32px;
     text-decoration: none;
@@ -27,7 +25,7 @@
     color: #f1f1f1;
 }
 
-/* Close button */
+
 .sidenav .closebtn {
     position: absolute;
     top: 0;
@@ -36,7 +34,7 @@
     margin-left: 50px;
 }
 
-/* Page content */
+
 #main {
     transition: margin-left .5s;
     padding: 20px;
@@ -46,7 +44,7 @@
 }
 
 
-/* Responsive sidenav for small screens */
+
 @media screen and (max-height: 450px) {
     .sidenav {
         padding-top: 15px;
@@ -57,9 +55,7 @@
     }
 }
 
-/* -------------------- */
-/* MAIN PAGE LAYOUT */
-/* -------------------- */
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -89,10 +85,6 @@ hr {
     padding: 20px;
 }
 
-/* -------------------- */
-/* SCROLLABLE MENU LISTS */
-/* -------------------- */
-
 .mechMenu {
     margin: auto;
     display: flex;
@@ -121,9 +113,9 @@ hr {
 .menu-container {
     display: flex;
     flex-direction: column;
-    /* stack label over menu */
+    
     align-items: center;
-    /* center label + menu contents */
+   
 }
 
 
@@ -275,7 +267,7 @@ hr {
     font-weight: bold;
     margin: 10px 0 5px 0;
     text-align: center;
-    /* optional */
+    
 
 }
 

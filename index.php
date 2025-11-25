@@ -1,8 +1,8 @@
 <?php
 
 $servername = "localhost";
-$username = "root";  //user name
-$password = "mdonnelly";  //password used to login MySQL server
+$username = "root";  
+$password = "mdonnelly";  
 $dbname = "mechmaker";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -43,7 +43,7 @@ function getMechs($conn)
 
 <body>
 
-    <!-- Hamburger icon -->
+    
     <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
 
     <!-- Side Navigation -->
@@ -56,7 +56,7 @@ function getMechs($conn)
         </div>
 
         <?php
-        // Example: mech menu on the Mech Maker page
+        // mech menu
         $mechs = $conn->query("SELECT mech_id, name, no_weapons FROM mech ORDER BY name");
         ?>
         <div class="mechMenu">
@@ -111,7 +111,7 @@ function getMechs($conn)
             <div class="bottom-section">
 
                 <?php
-                // Get all weapons from DB
+                // Get all weapons
                 $weapons = $conn->query("
                     SELECT weapon_id, name, type
                     FROM weapon
@@ -121,6 +121,8 @@ function getMechs($conn)
                 $missiles   = [];
                 $ballistics = [];
                 $energy     = [];
+
+                //split weapons by type
 
                 while ($w = $weapons->fetch_assoc()) {
                     $type = strtolower($w['type']);
@@ -190,11 +192,11 @@ function getMechs($conn)
                     <option value="">-- Select saved loadout --</option>
                     <?php
                     $res = $conn->query("
-            SELECT l.loadout_id, l.name, m.name AS mech_name
-            FROM loadout l
-            JOIN mech m ON l.mech_id = m.mech_id
-            ORDER BY l.loadout_id DESC
-        ");
+                        SELECT l.loadout_id, l.name, m.name AS mech_name
+                        FROM loadout l
+                        JOIN mech m ON l.mech_id = m.mech_id
+                        ORDER BY l.loadout_id DESC
+                    ");
                     while ($row = $res->fetch_assoc()):
                     ?>
                         <option value="<?= (int)$row['loadout_id'] ?>">
