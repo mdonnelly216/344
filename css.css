@@ -45,6 +45,7 @@
     height: 100vh;
 }
 
+
 /* Responsive sidenav for small screens */
 @media screen and (max-height: 450px) {
     .sidenav {
@@ -115,6 +116,12 @@ hr {
     background-color: white;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+.menu-container {
+    display: flex;
+    flex-direction: column; /* stack label over menu */
+    align-items: center;    /* center label + menu contents */
+}
+
 
 .menu button {
     border: none;
@@ -219,6 +226,39 @@ hr {
 }
 
 .mechImage{
-    margin: auto;
+    margin-left: 50px;
+
     
+}
+
+
+.weaponSlots {
+    
+    width: 500px;
+    height: 50px;
+    display: flex;
+    gap: 5px;
+    padding: 0px;
+    justify-content: center;   /* horizontal centering */
+    align-items: center;       /* vertical centering */
+
+}
+
+
+.weaponSlot
+ {
+    width: 40px;
+    height: 40px;
+    border: 1px solid gray;
+
+    display: flex;
+    justify-content: center;  /* horizontal text */
+    align-items: center;      
+}
+
+.menu-label {
+    font-weight: bold;
+    margin: 10px 0 5px 0;
+    text-align: center; /* optional */
+   
 }

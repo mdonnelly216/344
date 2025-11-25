@@ -2,7 +2,7 @@
 
 $servername = "localhost";
 $username = "root";  //user name
-$password = "4356An3?";  //password used to login MySQL server
+$password = "mdonnelly";  //password used to login MySQL server
 $dbname = "mechmaker";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -36,7 +36,7 @@ function getMechs($conn)
     <script src="js.js" defer></script>
     <script src="print.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 
 <body>
@@ -68,33 +68,28 @@ function getMechs($conn)
         
     </div>
 
-    <div>        
-    <input type ="button" value ="Print Loadout" onclick="printPDF()"></button>
+    <div>
+        <input type="button" value="Print Loadout" onclick="printPDF()"></button>
     </div>
 
     <div id="main">
 
         <div class="top-section">
             <h1>MechMaker</h1>
-            <div class = mechImage>
+            <div class=mechImage>
                 <img src="Images/atlasEdited.png" alt="MechMaker Logo" class="logo">
             </div>
-            <div class = weaponSlot1>
+            <div class="weaponSlots">
+                <div class="weaponSlot">1</div>
+                <div class="weaponSlot">2</div>
+                <div class="weaponSlot">3</div>
+                <div class="weaponSlot">4</div>
+                <div class="weaponSlot">5</div>
+                <div class="weaponSlot">6</div>
+                <div class="weaponSlot">7</div>
+                <div class="weaponSlot">8</div>
             </div>
-            <div class = weaponSlot2>
-            </div>
-            <div class = weaponSlot3>
-            </div>
-            <div class = weaponSlot4>
-            </div>
-            <div class = weaponSlot5>
-            </div>
-            <div class = weaponSlot6>
-            </div>
-            <div class = weaponSlot7>
-            </div>
-            <div class = weaponSlot8>
-            </div>
+
         </div>
 
         <hr>
@@ -106,44 +101,46 @@ function getMechs($conn)
         <div class="bottom-section">
 
             <!-- MISSILE MENU -->
-            <div class="menu">
-                <?php
-                $results = getWeapons($conn, "Missile");
-                while ($row = $results->fetch_assoc()):
-                ?>
-                    <button><?php echo htmlspecialchars($row['name']); ?></button>
-                <?php endwhile; ?>
+            <div class="menu-container">
+                <p class="menu-label">Missile</p>
+                <div class="menu">
+                    <?php
+                    $results = getWeapons($conn, "Missile");
+                    while ($row = $results->fetch_assoc()):
+                    ?>
+                        <button><?php echo htmlspecialchars($row['name']); ?></button>
+                    <?php endwhile; ?>
+                </div>
             </div>
 
             <!-- BALLISTIC MENU -->
-            <div class="menu">
-                <?php
-                $results = getWeapons($conn, "Ballistic");
-                while ($row = $results->fetch_assoc()):
-                ?>
-                    <button><?php echo htmlspecialchars($row['name']); ?></button>
-                <?php endwhile; ?>
+            <div class="menu-container">
+                <p class="menu-label">Ballistic</p>
+
+                <div class="menu">
+                    <?php
+                    $results = getWeapons($conn, "Ballistic");
+                    while ($row = $results->fetch_assoc()):
+                    ?>
+                        <button><?php echo htmlspecialchars($row['name']); ?></button>
+                    <?php endwhile; ?>
+                </div>
             </div>
 
             <!-- ENERGY MENU -->
-            <div class="menu">
-                <?php
-                $results = getWeapons($conn, "Energy");
-                while ($row = $results->fetch_assoc()):
-                ?>
-                    <button><?php echo htmlspecialchars($row['name']); ?></button>
-                <?php endwhile; ?>
+            <div class="menu-container">
+                <p class="menu-label">Energy</p>
+                <div class="menu">
+                    <?php
+                    $results = getWeapons($conn, "Energy");
+                    while ($row = $results->fetch_assoc()):
+                    ?>
+                        <button><?php echo htmlspecialchars($row['name']); ?></button>
+                    <?php endwhile; ?>
+                </div>
             </div>
 
-            <!-- ALL WEAPONS -->
-            <div class="menu">
-                <?php
-                $result = $conn->query("SELECT name FROM weapon ORDER BY type, name");
-                while ($row = $result->fetch_assoc()):
-                ?>
-                    <button><?php echo htmlspecialchars($row['name']); ?></button>
-                <?php endwhile; ?>
-            </div>
+
 
         </div>
     </div>
