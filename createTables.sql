@@ -3,7 +3,7 @@ CREATE DATABASE IF NOT EXISTS mechmaker;
 
 USE mechmaker;
 
-select * from weapons;
+select * from weaponsloadout;
 
 -- Mech table
 CREATE TABLE IF NOT EXISTS mech (

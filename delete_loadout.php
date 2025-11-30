@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
 $username   = "root";
-$password   = "mdonnelly";
+$password   = "4356An3?";
 $dbname     = "mechmaker";
 
 header('Content-Type: application/json');

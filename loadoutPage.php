@@ -2,7 +2,7 @@
 
 $servername = "localhost";
 $username   = "root";
-$password   = "mdonnelly";
+$password   = "4356An3?";
 $dbname     = "mechmaker";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -11,7 +11,6 @@ if ($conn->connect_error) {
 }
 
 
-// Get all loadouts and mech info
 $loadouts = [];
 
 $sqlLoadouts = "

@@ -2,7 +2,7 @@
 
 $servername = "localhost";
 $username = "root";  
-$password = "mdonnelly";  
+$password = "4356An3?";  
 $dbname = "mechmaker";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -23,6 +23,17 @@ function getMechs($conn)
     $stmt = $conn->prepare("SELECT name FROM mech");
     $stmt->execute();
     return $stmt->get_result();
+}
+
+function getDMGTotals($conn, $weapon_id){
+    $stmt = $conn->prepare("
+        SELECT short_damage, medium_damage, long_damage
+        FROM weapon
+        WHERE weapon_id = ?
+    ");
+    $stmt->bind_param("i", $weapon_id);
+    $stmt->execute();
+    return $stmt->get_result()->fetch_assoc();
 }
 
 ?>
@@ -55,6 +66,7 @@ function getMechs($conn)
         </div>
 
         <?php
+
         // mech menu
         $mechs = $conn->query("SELECT mech_id, name, no_weapons FROM mech ORDER BY name");
         ?>
@@ -81,9 +93,9 @@ function getMechs($conn)
             <h1>MechMaker</h1>
             <div id="mechWrapper">
                 <img id="mechDisplay" src="">
-                <div id="overlayShortDMG" class="overlayText" >0</div>
-                <div id="overlayMedDMG" class="overlayText" >0</div>
-                <div id="overlayLongDMG" class="overlayText" >0</div>
+                <div id="overlayShortDMG" class = "overlayText">0</div>
+                <div id="overlayMedDMG" class = "overlayText">0</div>
+                <div id="overlayLongDMG" class = "overlayText">0</div>
             </div>
     
             <div class="weaponSlots">
@@ -172,7 +184,6 @@ function getMechs($conn)
                     </div>
 
                 </div>
-
 
                 <button type="button" onclick="addWeapon()">Add Selected Weapon</button>
 

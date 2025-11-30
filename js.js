@@ -284,4 +284,38 @@ function addWeapon() {
     selectedWeapons = selectedWeapons.filter(Boolean);
 
     renderSelectedWeapons();
+    updateDamageOverlay();
+}
+
+async function updateDamageOverlay() {
+    const shortEl = document.getElementById("overlayShortDMG");
+    const medEl   = document.getElementById("overlayMedDMG");
+    const longEl  = document.getElementById("overlayLongDMG");
+
+    let totalShort = 0;
+    let totalMed   = 0;
+    let totalLong  = 0;
+
+    // Get weapon names currently in slots
+    const names = selectedWeapons.map(w => w.name);
+
+    for (let name of names) {
+        try {
+            const res = await fetch("get_weapon_damage.php?name=" + encodeURIComponent(name));
+            const data = await res.json();
+
+            if (data.success) {
+                totalShort += parseInt(data.damage.short_damage);
+                totalMed   += parseInt(data.damage.medium_damage);
+                totalLong  += parseInt(data.damage.long_damage);
+            }
+        } catch (err) {
+            console.error("Damage fetch error", err);
+        }
+    }
+
+    // Update overlay text
+    shortEl.textContent = totalShort;
+    medEl.textContent   = totalMed;
+    longEl.textContent  = totalLong;
 }
