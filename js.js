@@ -288,9 +288,9 @@ function addWeapon() {
 }
 
 async function updateDamageOverlay() {
-    const shortEl = document.getElementById("overlayShortDMG");
-    const medEl   = document.getElementById("overlayMedDMG");
-    const longEl  = document.getElementById("overlayLongDMG");
+    const short = document.getElementById("overlayShortDMG");
+    const med   = document.getElementById("overlayMedDMG");
+    const long  = document.getElementById("overlayLongDMG");
 
     let totalShort = 0;
     let totalMed   = 0;
@@ -315,7 +315,7 @@ async function updateDamageOverlay() {
     }
 
     // Update overlay text
-    shortEl.textContent = totalShort;
-    medEl.textContent   = totalMed;
-    longEl.textContent  = totalLong;
+    short.textContent = totalShort;
+    med.textContent   = totalMed;
+    long.textContent  = totalLong;
 }
