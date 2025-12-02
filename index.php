@@ -2,7 +2,7 @@
 
 $servername = "localhost";
 $username = "root";  
-$password = "mdonnelly";  
+$password = "4356An3?";  
 $dbname = "mechmaker";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -11,6 +11,17 @@ if ($conn->connect_error) {
 }
 
 
+
+function getDMGTotals($conn, $weapon_id){
+    $stmt = $conn->prepare("
+        SELECT short_damage, medium_damage, long_damage
+        FROM weapon
+        WHERE weapon_id = ?
+    ");
+    $stmt->bind_param("i", $weapon_id);
+    $stmt->execute();
+    return $stmt->get_result()->fetch_assoc();
+}
 
 ?>
 
@@ -24,8 +35,7 @@ if ($conn->connect_error) {
     <script src="js.js" defer></script>
     <script src="print.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="print.js" defer></script>
+
 </head>
 
 <body>
@@ -43,6 +53,7 @@ if ($conn->connect_error) {
         </div>
 
         <?php
+
         // mech menu
         $mechs = $conn->query("SELECT mech_id, name, no_weapons FROM mech ORDER BY name");
         ?>
@@ -67,11 +78,11 @@ if ($conn->connect_error) {
 
         <div class="top-section">
             <h1>MechMaker</h1>
-            <div class="mechWrapper">
+            <div id="mechWrapper">
                 <img id="mechDisplay" src="">
-                <div id="overlayShortDMG" class="overlayText">0</div>
-                <div id="overlayMedDMG" class="overlayText">0</div>
-                <div id="overlayLongDMG" class="overlayText">0</div>
+                <div id="overlayShortDMG" class = "overlayText">0</div>
+                <div id="overlayMedDMG" class = "overlayText">0</div>
+                <div id="overlayLongDMG" class = "overlayText">0</div>
             </div>
     
             <div class="weaponSlots">
@@ -160,7 +171,6 @@ if ($conn->connect_error) {
                     </div>
 
                 </div>
-
 
                 <button type="button" onclick="addWeapon()">Add Selected Weapon</button>
 

@@ -1,27 +1,20 @@
 
-//src = https://www.youtube.com/watch?v=i7EOZB3a1Vs
+//src = https://www.youtube.com/watch?v=eLgNDpKuGts
 
 
 async function printPDF() {
-    const { jsPDF } = window.jspdf;
+    const div = document.getElementById("mechWrapper");
 
-    const mechImage = document.getElementById("mechDisplay");
-
-    // image to canvas
-    const canvas = await html2canvas(mechImage, {
-        backgroundColor: null, 
-        scale: 1 
+    const canvas = await html2canvas(div, {
+        scale: 3,
+        useCORS: true,       
+        allowTaint: true
     });
 
     const imgData = canvas.toDataURL("image/png");
 
-    const pdf = new jsPDF({
-        orientation: canvas.width > canvas.height ? 'landscape' : 'portrait',
-        unit: "pt",
-        format: [canvas.width, canvas.height],
-    });
-
-
-    pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
-    pdf.save("loadout.pdf");
-}   
+    const link = document.createElement('a');
+    link.href = imgData;
+    link.download = 'mechCard.png';
+    link.click();
+}
