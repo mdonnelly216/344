@@ -10,20 +10,7 @@ if ($conn->connect_error) {
     die("DB Connection failed: " . $conn->connect_error);
 }
 
-function getWeapons($conn, $type)
-{
-    $stmt = $conn->prepare("SELECT name FROM weapon WHERE type = ?");
-    $stmt->bind_param("s", $type);
-    $stmt->execute();
-    return $stmt->get_result();
-}
 
-function getMechs($conn)
-{
-    $stmt = $conn->prepare("SELECT name FROM mech");
-    $stmt->execute();
-    return $stmt->get_result();
-}
 
 ?>
 
@@ -189,7 +176,7 @@ function getMechs($conn)
                 <br><br>
 
                 <select id="loadoutSelect">
-                    <option value="">-- Select saved loadout --</option>
+                    <option value="">-- Select loadout --</option>
                     <?php
                     $res = $conn->query("
                         SELECT l.loadout_id, l.name, m.name AS mech_name
